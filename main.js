@@ -1,31 +1,43 @@
+'use strict';
+
 const electron = require('electron');
 
-const { app, BrowserWindow } = electron;
+// on va charger le module node dans app
+// en dans module node la variable osenv peut redousdre le pro des emplacement
+const fs = require('fs');
+const osenv =require('osenv');
+
+// la fonction osenv.home return le dossier personnel de l'user
+function getUsersHomeFolder() {
+  return osenv.home();
+}
+
+// on liste les fichiers avec fs.readdir  (fs: fileSystem)
+function getFilesInFolder(folderPath,cb){
+  fs.readdir(folderPath,cb);
+}
+
+function main(){
+  const folderPath = getUsersHomeFolder();
+  getFilesInFolder(folderPath, (err, files) => {
+    if (err) {
+      console.log('Vous avez pas chargé votre dossier HOME');
+    }
+    files.forEach((file) => {
+      console.log(`${folderPath}/${file}`);
+    });
+  });
+}
+
+main();
+
+// on créer des obj app pour electron
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
 
 // garder une reférence globale à un objet fenetre, 
 // la fenetre fermera quand obj js seront collecter
 let mainWindow;
-
-function createWindow() {
- // crer une  fenetre navigateur
-  mainWindow = new BrowserWindow({width: 800, height: 600});
-
-  // on charge index.html dans le repec courant
-  mainWindow.loadURL(`file://${__dirname}/index.html`);
-
- // activation des outils de dev
-  mainWindow.webContents.openDevTools();
-
-  // un eve se declenche lorsque une fenetre se ferm
-  mainWindow.on('closed', () => {
-    // delete tout les eve des chaque obj
-    mainWindow = null;
-  });
-}
-
-// initialissation de electron grace a cette fonction
-// api non disp si eve rezady n'est pas activer
-app.on('ready', createWindow);
 
 // fermer tout les fenetre
 app.on('window-all-closed', () => {
@@ -36,9 +48,18 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('activate', () => {
-  // crer une nouvelle fenetre
-  if (mainWindow === null) {
-    createWindow();
-  }
+
+app.on('ready', () => {
+  /*
+   crer une new fenetre
+  */
+  mainWindow = new BrowserWindow();
+
+  // charger index.html
+  mainWindow.loadURL(`file://${__dirname}/index.html`);
+
+  // liberer mainwindxos quand il est plus allouer
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
 });
