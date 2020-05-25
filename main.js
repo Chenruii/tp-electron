@@ -1,30 +1,44 @@
-//引用electron的模块
-const electron = require('electron')
-const app = electron.app
+const electron = require('electron');
 
-const BrowserWindow = electron.BrowserWindow
+const { app, BrowserWindow } = electron;
 
-const path = require('path')
-const url = require('url')
+// garder une reférence globale à un objet fenetre, 
+// la fenetre fermera quand obj js seront collecter
+let mainWindow;
 
-let mainWindow
+function createWindow() {
+ // crer une  fenetre navigateur
+  mainWindow = new BrowserWindow({width: 800, height: 600});
 
-function createWindow () {
-  // 创建窗口
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  // on charge index.html dans le repec courant
+  mainWindow.loadURL(`file://${__dirname}/index.html`);
 
-  // 通过 url 加载主页
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
+ // activation des outils de dev
+  mainWindow.webContents.openDevTools();
 
-  // 在打开时启用开发者工具
-  // mainWindow.webContents.openDevTools()
-
-  // 监听窗口是否关闭
-  mainWindow.on('closed', function () {
-    mainWindow = null
-  })
+  // un eve se declenche lorsque une fenetre se ferm
+  mainWindow.on('closed', () => {
+    // delete tout les eve des chaque obj
+    mainWindow = null;
+  });
 }
+
+// initialissation de electron grace a cette fonction
+// api non disp si eve rezady n'est pas activer
+app.on('ready', createWindow);
+
+// fermer tout les fenetre
+app.on('window-all-closed', () => {
+  
+  // sinon les brre de menu resteront active
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('activate', () => {
+  // crer une nouvelle fenetre
+  if (mainWindow === null) {
+    createWindow();
+  }
+});
