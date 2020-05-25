@@ -7,29 +7,10 @@ const electron = require('electron');
 const fs = require('fs');
 const osenv =require('osenv');
 
-// la fonction osenv.home return le dossier personnel de l'user
-function getUsersHomeFolder() {
-  return osenv.home();
-}
-
-// on liste les fichiers avec fs.readdir  (fs: fileSystem)
-function getFilesInFolder(folderPath,cb){
-  fs.readdir(folderPath,cb);
-}
-
-function main(){
-  const folderPath = getUsersHomeFolder();
-  getFilesInFolder(folderPath, (err, files) => {
-    if (err) {
-      console.log('Vous avez pas chargé votre dossier HOME');
-    }
-    files.forEach((file) => {
-      console.log(`${folderPath}/${file}`);
-    });
-  });
-}
-
-main();
+// decl de mod async : traiter les appel à des fonction asynchorne et prendre les resulats
+// decl mod path
+const async = require('async');
+const path = require('path');
 
 // on créer des obj app pour electron
 const app = electron.app;
@@ -37,7 +18,7 @@ const BrowserWindow = electron.BrowserWindow;
 
 // garder une reférence globale à un objet fenetre, 
 // la fenetre fermera quand obj js seront collecter
-let mainWindow;
+let mainWindow = null;
 
 // fermer tout les fenetre
 app.on('window-all-closed', () => {
@@ -48,12 +29,18 @@ app.on('window-all-closed', () => {
   }
 });
 
-
 app.on('ready', () => {
   /*
    crer une new fenetre
   */
-  mainWindow = new BrowserWindow();
+ mainWindow = new BrowserWindow({
+  webPreferences: {
+    nodeIntegration: true
+  }
+});
+
+// debug
+mainWindow.webContents.openDevTools();
 
   // charger index.html
   mainWindow.loadURL(`file://${__dirname}/index.html`);
