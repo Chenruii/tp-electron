@@ -11,6 +11,10 @@ const osenv =require('osenv');
 const async = require('async');
 const path = require('path');
 
+//import des fichiers
+const fileSystem = require('./fileSystem');
+const userInterface = require('./userInterface');
+
 // la fonction osenv.home return le dossier personnel de l'user
 function getUsersHomeFolder() {
   return osenv.home();
@@ -77,7 +81,21 @@ function displayFiles(err, files) {
 
 //  fonction qui recupere les chemins d'acces au dossier perso de user et les ifo de la liste des fichier dans le dossier
 function main(){
-  const folderPath = getUsersHomeFolder();
+    // on contexteulise les docs
+    userInterface.bindDocument(window);
+
+    const folderPath = fileSystem.getUsersHomeFolder();
+ 
+    /*
+    fileSystem.getFilesInFolder(folderPath, (err, files) => {
+      if (err) {
+        console.log('Vous avez pas chargé votre dossier HOME');
+      }
+      fileSystem.inspectAndDescribeFiles(folderPath, files, userInterface.displayFiles);
+    });
+  }
+  
+   const folderPath = getUsersHomeFolder();
   getFilesInFolder(folderPath, (err, files) => {
     if (err) {
       console.log('Vous avez pas chargé votre dossier HOME');
@@ -85,11 +103,16 @@ function main(){
     /*
     files.forEach((file) => {
       console.log(`${folderPath}/${file}`);
-    });*/
+    });
+
     inspectAndDescribeFiles(folderPath, files, displayFiles);
   });
+  */
+ // on reninitialise le zone de texte et maj du chemi d'acces precedente de la zone
+ userInterface.loadDirectory(folderPath)(window);
 }
-
+  
 window.onload = function() {
     main();
   };
+

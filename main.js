@@ -16,6 +16,7 @@ const path = require('path');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
+
 // garder une reférence globale à un objet fenetre, 
 // la fenetre fermera quand obj js seront collecter
 let mainWindow = null;

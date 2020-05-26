@@ -1,22 +1,29 @@
 {
-  "name": "electron-quick-start",
+  "name": "tp",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chenruii/tp-electron.git"
+  },
+  "author": "Chenrui",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chenruii/tp-electron/issues"
+  },
+  "homepage": "https://github.com/Chenruii/tp-electron#readme",
   "devDependencies": {
-    "electron": "^9.0.0"
+    "electron": "^9.0.0",
+    "purgecss": "^2.2.1"
+  },
+  "dependencies": {
+    "async": "^3.2.0",
+    "fs": "0.0.1-security",
+    "osenv": "^0.1.5",
+    "startbootstrap-bare": "^4.2.1"
   }
 }
