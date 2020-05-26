@@ -4,19 +4,19 @@
 // en dans module node la variable osenv peut redousdre le pro des emplacement
 const fs = require('fs');
 const osenv =require('osenv');
-
 // decl de mod async : traiter les appel à des fonction asynchorne et prendre les resulats
 // decl mod path
 const async = require('async');
 const path = require('path');
 
 const shell = require('electron').shell;
-
-function openFile(filePath) {
-  //  on appel la fonction openItem de api shell
-  shell.openItem(filePath);
+/*
+if (process.versions.electron) {
+  shell = require('electron').shell;
+} else {
+  shell = window.require('nw.gui').Shell;
 }
-
+*/
 // la fonction osenv.home return le dossier personnel de l'user
 function getUsersHomeFolder() {
   return osenv.home();
@@ -25,7 +25,7 @@ function getUsersHomeFolder() {
 // on liste les fichiers avec fs.readdir  (fs: fileSystem)
 function getFilesInFolder(folderPath,cb){
     fs.readdir(folderPath,cb);
-  }
+}
   
 function inspectAndDescribeFile(filePath, cb) {
     let result = {
@@ -48,7 +48,7 @@ function inspectAndDescribeFile(filePath, cb) {
         cb(err, result);
       }
     });
-  }
+}
 
   function inspectAndDescribeFiles(folderPath, files, cb) {
     // avec async, on appel les fonction async et prendre res
@@ -56,20 +56,24 @@ function inspectAndDescribeFile(filePath, cb) {
       const resolveFilePath = path.resolve(folderPath, file);
       inspectAndDescribeFile(resolveFilePath, asyncCB);
     }, cb);
-  }
+}
      
-  function inspectAndDescribeFiles(folderPath, files, cb) {
+function inspectAndDescribeFiles(folderPath, files, cb) {
     // avec async, on appel les fonction async et prendre res
     async.map(files, (file, asyncCB) => {
       const resolveFilePath = path.resolve(folderPath, file);
       inspectAndDescribeFile(resolveFilePath, asyncCB);
     }, cb);
-  }
-     
-    module.exports = {
-      getUsersHomeFolder,
-      getFilesInFolder,
-      inspectAndDescribeFiles,
-      openFile
-    };
+}
+  
+function openFile(filePath) {
+  //  on appel la fonction openItem de api shell
+  shell.openItem(filePath);
+}
 
+module.exports = {
+  getUsersHomeFolder,
+  getFilesInFolder,
+  inspectAndDescribeFiles,
+  openFile
+};

@@ -6,29 +6,6 @@ const fileSystem = require('./fileSystem');
 const search = require('./search');
 const path = require('path');
 
-function convertFolderPathIntoLinks(folderPath) {
-  const folders = folderPath.split(path.sep);
-  const contents = [];
-  let pathAtFolder = '';
-  folders.forEach((folder) => {
-    pathAtFolder += folder + path.sep;
-    const str = `<span class="path" data-path="${pathAtFolder.slice(0, -1)}">${folder}</span>`;
-    contents.push(str);
-  });
-  return contents.join(path.sep).toString();
-}
-
-function bindCurrentFolderPath() {
-  const load = (event) => {
-    const folderPath = event.target.getAttribute('data-path');
-    loadDirectory(folderPath)();
-  }
-  const paths = document.getElementsByClassName('path');
-  for (var i = 0; i < paths.length; i++) {
-    paths[i].addEventListener('click', load, false);
-  }
-}
-
 // maj chemin acces
 function displayFolderPath(folderPath) {
   /*document.getElementById('current-folder').innerText = folderPath;*/
@@ -44,6 +21,7 @@ function clearView() {
     firstChild = mainArea.firstChild;
   }
 }
+
 // fonction qui maj chemin acces dans zone de texte
 function loadDirectory(folderPath) {
   return function (window) {
@@ -66,6 +44,7 @@ function loadDirectory(folderPath) {
     });
   }
 }
+
 function displayFile(file) {
   const mainArea = document.getElementById('main-area');
   const template = document.querySelector('#item-template');
@@ -98,7 +77,7 @@ function displayFile(file) {
   mainArea.appendChild(clone);
 }
 
-  // fonction qui permet d'afficher les info de la liste des dossiers
+// fonction qui permet d'afficher les info de la liste des dossiers
 function displayFiles(err, files) {
     if (err) {
       return alert('On ne peux pas afficher les fichiers');
@@ -106,6 +85,18 @@ function displayFiles(err, files) {
     files.forEach((file) => {
       console.log(file);
     });
+}
+
+// fonction qui permet de contectualiser les docu dans la fenetre
+function bindDocument (window) {
+  if (!document) {
+    document = window.document;
+  }
+}
+
+// pour ecouter la recherche
+function bindSearchField(cb) {
+  document.getElementById('search').addEventListener('keyup', cb, false);
 }
 
 function filterResults(results) {
@@ -136,17 +127,27 @@ function resetFilter() {
   }
 }
 
-
-// fonction qui permet de contectualiser les docu dans la fenetre
-function bindDocument (window) {
-    if (!document) {
-      document = window.document;
-    }
+function convertFolderPathIntoLinks(folderPath) {
+  const folders = folderPath.split(path.sep);
+  const contents = [];
+  let pathAtFolder = '';
+  folders.forEach((folder) => {
+    pathAtFolder += folder + path.sep;
+    const str = `<span class="path" data-path="${pathAtFolder.slice(0, -1)}">${folder}</span>`;
+    contents.push(str);
+  });
+  return contents.join(path.sep).toString();
 }
 
-// pour ecouter la recherche
-function bindSearchField(cb) {
-  document.getElementById('search').addEventListener('keyup', cb, false);
+function bindCurrentFolderPath() {
+  const load = (event) => {
+    const folderPath = event.target.getAttribute('data-path');
+    loadDirectory(folderPath)();
+  }
+  const paths = document.getElementsByClassName('path');
+  for (var i = 0; i < paths.length; i++) {
+    paths[i].addEventListener('click', load, false);
+  }
 }
 
 module.exports = {

@@ -1,25 +1,42 @@
-#item-template{
-    margin: auto;
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Helvetica','Arial','sans';
 }
-.item{
-    width: auto;
+#toolbar {
+    top: 0px;
+    position: fixed;
+    background: red;
+    width: 100%;
+    z-index: 2;
 }
-.icon{ 
+#current-folder {
+    float: left;
+    color: white;
+    background: rgba(0,0,0,0.2);
+    padding: 0.5em 1em;
+    min-width: 10em;
+    border-radius: 0.2em;
+    margin: 1em;
+}
+#main-area {
+    clear: both;
+    margin: 2em;
+    margin-top: 3em;
+    z-index: 1;
+}
+.item {
+    position: relative;
+    float: left;
+    padding: 1em;
+    margin: 1em;
+    width: 6em;
+    height: 6em;
     text-align: center;
 }
-.filename{
-text-align: center;
-}
-
-#current-folder{
-    text-align: center;
-}
-#toolbar{
-    text-align: center;
-}
-#main-area{
-    text-align: center;
-    padding-left: 1%;
+.item .filename {
+    padding-top: 1em;
+    font-size: 10pt;
 }
 #search {
     float: right;
@@ -30,13 +47,7 @@ text-align: center;
     border: none;
     outline: none;
 }
-
-.span.path:hover {
+span.path:hover, img:hover {
     opacity: 0.7;
     cursor: pointer;
 }
-
-.img:hover {
-    opacity: 0.7;
-    cursor: pointer;
-  }

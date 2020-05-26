@@ -1,7 +1,6 @@
 'use strict';
      
 const lunr = require('lunr');
-     
 let index;
      
 // indexe et reini la search
