@@ -5,11 +5,17 @@
 const fs = require('fs');
 const osenv =require('osenv');
 
-
 // decl de mod async : traiter les appel à des fonction asynchorne et prendre les resulats
 // decl mod path
 const async = require('async');
 const path = require('path');
+
+const shell = require('electron').shell;
+
+function openFile(filePath) {
+  //  on appel la fonction openItem de api shell
+  shell.openItem(filePath);
+}
 
 // la fonction osenv.home return le dossier personnel de l'user
 function getUsersHomeFolder() {
@@ -63,6 +69,7 @@ function inspectAndDescribeFile(filePath, cb) {
     module.exports = {
       getUsersHomeFolder,
       getFilesInFolder,
-      inspectAndDescribeFiles
+      inspectAndDescribeFiles,
+      openFile
     };
 

@@ -87,6 +87,11 @@ function displayFile(file) {
       // charger les dossier apres clique
       loadDirectory(file.path)();
     }, false);
+  } else {
+    //autre doc qui appartien pas au dossier comme les texts
+    clone.querySelector('img').addEventListener('dblclick', () => {
+      fileSystem.openFile(file.path);
+    })
   }
 
   clone.querySelector('.filename').innerText = file.file;

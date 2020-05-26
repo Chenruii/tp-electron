@@ -31,11 +31,12 @@ text-align: center;
     outline: none;
 }
 
-
-
 .span.path:hover {
     opacity: 0.7;
     cursor: pointer;
 }
 
-
+.img:hover {
+    opacity: 0.7;
+    cursor: pointer;
+  }
