@@ -23,6 +23,7 @@
   "dependencies": {
     "async": "^3.2.0",
     "fs": "0.0.1-security",
+    "lunr": "^2.3.8",
     "osenv": "^0.1.5",
     "startbootstrap-bare": "^4.2.1"
   }

@@ -14,6 +14,7 @@ const path = require('path');
 //import des fichiers
 const fileSystem = require('./fileSystem');
 const userInterface = require('./userInterface');
+const search = require('./search');
 
 // la fonction osenv.home return le dossier personnel de l'user
 function getUsersHomeFolder() {
@@ -93,8 +94,7 @@ function main(){
       }
       fileSystem.inspectAndDescribeFiles(folderPath, files, userInterface.displayFiles);
     });
-  }
-  
+  }  
    const folderPath = getUsersHomeFolder();
   getFilesInFolder(folderPath, (err, files) => {
     if (err) {
@@ -108,11 +108,24 @@ function main(){
     inspectAndDescribeFiles(folderPath, files, displayFiles);
   });
   */
- // on reninitialise le zone de texte et maj du chemi d'acces precedente de la zone
- userInterface.loadDirectory(folderPath)(window);
+// on reninitialise le zone de texte et maj du chemi d'acces precedente de la zone
+userInterface.loadDirectory(folderPath)(window);
+
+// eve pour le changement des valeur des search
+userInterface.bindSearchField((event) => {
+  const val = event.target.value;
+  if (val === '') {
+    // si reche vide,on reinitialise a 0
+    userInterface.resetFilter();
+  } else {
+    /*
+     si ya des res, on appel la fonction de search pour traitere t filtrer les res sur interface
+    */
+    search.find(val, userInterface.filterResults);
+  }
+  });
 }
   
 window.onload = function() {
     main();
   };
-
