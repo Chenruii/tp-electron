@@ -4,10 +4,35 @@ let document;
 
 const fileSystem = require('./fileSystem');
 const search = require('./search');
+const path = require('path');
+
+function convertFolderPathIntoLinks(folderPath) {
+  const folders = folderPath.split(path.sep);
+  const contents = [];
+  let pathAtFolder = '';
+  folders.forEach((folder) => {
+    pathAtFolder += folder + path.sep;
+    const str = `<span class="path" data-path="${pathAtFolder.slice(0, -1)}">${folder}</span>`;
+    contents.push(str);
+  });
+  return contents.join(path.sep).toString();
+}
+
+function bindCurrentFolderPath() {
+  const load = (event) => {
+    const folderPath = event.target.getAttribute('data-path');
+    loadDirectory(folderPath)();
+  }
+  const paths = document.getElementsByClassName('path');
+  for (var i = 0; i < paths.length; i++) {
+    paths[i].addEventListener('click', load, false);
+  }
+}
 
 // maj chemin acces
 function displayFolderPath(folderPath) {
-  document.getElementById('current-folder').innerText = folderPath;
+  /*document.getElementById('current-folder').innerText = folderPath;*/
+  document.getElementById('current-folder').innerHTML = convertFolderPathIntoLinks(folderPath);
 }
 
 // on vide le contenu
@@ -106,12 +131,14 @@ function resetFilter() {
   }
 }
 
+
 // fonction qui permet de contectualiser les docu dans la fenetre
 function bindDocument (window) {
     if (!document) {
       document = window.document;
     }
 }
+
 // pour ecouter la recherche
 function bindSearchField(cb) {
   document.getElementById('search').addEventListener('keyup', cb, false);
