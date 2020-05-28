@@ -48,7 +48,7 @@ userInterface.bindSearchField((event) => {
      si ya des res, on appel la fonction de search pour traitere t filtrer les res sur interface
     */
     search.find(query , userInterface.filterResults);
-  }
+    }
   });
 }
   

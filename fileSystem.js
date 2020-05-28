@@ -9,7 +9,7 @@ const osenv =require('osenv');
 const async = require('async');
 const path = require('path');
 
-const shell = require('electron').shell;
+let shell;
 /*
 if (process.versions.electron) {
   shell = require('electron').shell;

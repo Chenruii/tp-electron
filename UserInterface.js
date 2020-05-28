@@ -10,6 +10,7 @@ const path = require('path');
 function displayFolderPath(folderPath) {
   /*document.getElementById('current-folder').innerText = folderPath;*/
   document.getElementById('current-folder').innerHTML = convertFolderPathIntoLinks(folderPath);
+  bindCurrentFolderPath();
 }
 
 // on vide le contenu
@@ -34,7 +35,6 @@ function loadDirectory(folderPath) {
     // update de chemin acces dans le zone texte
     displayFolderPath(folderPath);
     fileSystem.getFilesInFolder(folderPath, (err, files) => {
-
       // on delete les ele de main area
       clearView();
       if (err) {
@@ -54,11 +54,12 @@ function displayFile(file) {
   // ajouter le fichier à lindex de search
   search.addToIndex(file);
 
+  // on ajoute le nomFichier et son icone
+  clone.querySelector('img').src = `images/${file.type}.svg`;
+
   // on save le chemin acces dans data-filePath 
   clone.querySelector('img').setAttribute('data-filePath', file.path);
 
-  // on ajoute le nomFichier et son icone
-  clone.querySelector('img').src = `images/${file.type}.svg`;
 
   // si repectoire , alors on doucle clique sur leima de repectoire
   if (file.type === 'directory') {
@@ -70,9 +71,8 @@ function displayFile(file) {
     //autre doc qui appartien pas au dossier comme les texts
     clone.querySelector('img').addEventListener('dblclick', () => {
       fileSystem.openFile(file.path);
-    })
+    },false);
   }
-
   clone.querySelector('.filename').innerText = file.file;
   mainArea.appendChild(clone);
 }
@@ -82,9 +82,10 @@ function displayFiles(err, files) {
     if (err) {
       return alert('On ne peux pas afficher les fichiers');
     }
-    files.forEach((file) => {
+    /*files.forEach((file) => {
       console.log(file);
-    });
+    });*/
+    files.forEach(displayFile);
 }
 
 // fonction qui permet de contectualiser les docu dans la fenetre
@@ -133,8 +134,7 @@ function convertFolderPathIntoLinks(folderPath) {
   let pathAtFolder = '';
   folders.forEach((folder) => {
     pathAtFolder += folder + path.sep;
-    const str = `<span class="path" data-path="${pathAtFolder.slice(0, -1)}">${folder}</span>`;
-    contents.push(str);
+    contents.push(`<span class="path" data-path="${pathAtFolder.slice(0, -1)}">${folder}</span>`);
   });
   return contents.join(path.sep).toString();
 }
@@ -143,7 +143,7 @@ function bindCurrentFolderPath() {
   const load = (event) => {
     const folderPath = event.target.getAttribute('data-path');
     loadDirectory(folderPath)();
-  }
+  };
   const paths = document.getElementsByClassName('path');
   for (var i = 0; i < paths.length; i++) {
     paths[i].addEventListener('click', load, false);
