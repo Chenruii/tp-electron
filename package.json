@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "async": "^3.2.0",
+    "express": "^4.17.1",
     "fs": "0.0.1-security",
     "lunr": "^2.3.8",
     "osenv": "^0.1.5",

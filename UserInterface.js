@@ -82,10 +82,10 @@ function displayFiles(err, files) {
     if (err) {
       return alert('On ne peux pas afficher les fichiers');
     }
-    /*files.forEach((file) => {
+    files.forEach((file) => {
       console.log(file);
-    });*/
-    files.forEach(displayFile);
+    });
+    /*files.forEach(displayFile);*/
 }
 
 // fonction qui permet de contectualiser les docu dans la fenetre
